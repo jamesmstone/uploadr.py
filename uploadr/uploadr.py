@@ -340,6 +340,7 @@ class Uploadr:
             print("Uploading " + image + "...")
             try:
                 photo = ('photo', image, open(image,'rb').read())
+                filename = image.replace(IMAGE_DIR, "")
                 if args.title: # Replace
                     FLICKR["title"] = args.title
                 if args.description: # Replace
@@ -351,7 +352,7 @@ class Uploadr:
                     api.perms       : str(self.perms),
                     "title"         : str( FLICKR["title"] ),
                     "description"   : str( FLICKR["description"] ),
-                    "tags"          : str( FLICKR["tags"] ),
+                    "tags"          : str( filename + " " + FLICKR["tags"] ),
                     "is_public"     : str( FLICKR["is_public"] ),
                     "is_friend"     : str( FLICKR["is_friend"] ),
                     "is_family"     : str( FLICKR["is_family"] )
