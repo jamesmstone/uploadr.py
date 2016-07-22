@@ -12,16 +12,6 @@
    Inspired by:
         http://micampe.it/things/flickruploadr
 
-   Usage:
-
-   The best way to use this is to just fire this up in the background and forget about it.
-   If you find you have CPU/Process limits, then setup a cron job.
-
-   %nohup python uploadr.py -d &
-
-   cron entry (runs at the top of every hour )
-   0  *  *   *   * /full/path/to/uploadr.py > /dev/null 2>&1
-
    September 2005
    Cameron Mallory   cmallory/berserk.org
 
