@@ -301,11 +301,10 @@ class Uploadr:
             return False
 
 
-    def upload( self ):
+    def upload(self, newImages):
         """ upload
         """
 
-        newImages = self.grabNewImages()
         if ( not self.checkToken() ):
             self.authenticate()
         self.uploaded = shelve.open( HISTORY_FILE )
