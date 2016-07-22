@@ -52,8 +52,9 @@ import xmltramp
 
 #
 # Location to scan for new images
+# Keep trailing slash
 #
-IMAGE_DIR = "images/"
+IMAGE_DIR = "/Users/chrissy/Pictures/personal/2016/07-july2/"
 #
 #   Flickr settings
 #
@@ -314,6 +315,9 @@ class Uploadr:
                 print("Waiting " + str(DRIP_TIME) + " seconds before next upload")
                 time.sleep( DRIP_TIME )
         self.uploaded.close()
+        checkImages = self.grabNewImages()
+        if checkImages:
+            self.upload(checkImages)
 
     def grabNewImages( self ):
         """ grabNewImages
@@ -321,12 +325,17 @@ class Uploadr:
 
         images = []
         foo = os.walk( IMAGE_DIR )
+        self.uploaded = shelve.open( HISTORY_FILE )
         for data in foo:
             (dirpath, dirnames, filenames) = data
             for f in filenames :
                 ext = f.lower().split(".")[-1]
-                    images.append( os.path.normpath( dirpath + "/" + f ) )
                 if ( ext == "jpg" or ext == "gif" or ext == "png" or ext == "mp4" ):
+                    imgpath = os.path.normpath( dirpath + "/" + f )
+                    if imgpath in self.uploaded:
+                        continue
+                    images.append(imgpath)
+        self.uploaded.close()
         images.sort()
         return images
 
@@ -336,7 +345,7 @@ class Uploadr:
         """
 
         success = False
-        if ( not self.uploaded.has_key( image ) ):
+        if image not in self.uploaded:
             print("Uploading " + image + "...")
             try:
                 photo = ('photo', image, open(image,'rb').read())
@@ -462,11 +471,11 @@ class Uploadr:
     def run( self ):
         """ run
         """
-
-        while ( True ):
-            self.upload()
-            print("Last check: " + str( time.asctime(time.localtime())))
-            time.sleep( SLEEP_TIME )
+        newImages = self.grabNewImages()
+        if newImages:
+            self.upload(newImages)
+        print("Last check: " + str( time.asctime(time.localtime())))
+        # time.sleep( SLEEP_TIME )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Upload images to Flickr.')
@@ -487,4 +496,6 @@ if __name__ == "__main__":
     if args.daemon:
         flick.run()
     else:
-        flick.upload()
+        newImages = flick.grabNewImages()
+        if newImages:
+            flick.upload(newImages)
