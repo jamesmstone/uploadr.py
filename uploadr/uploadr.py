@@ -104,6 +104,9 @@ class Uploadr:
     token = None
     perms = ""
     TOKEN_FILE = os.path.join(IMAGE_DIR, ".flickrToken")
+    UPLOAD_EXT = [
+        "jpg", "gif", "png", "mp4"
+    ]
 
     def __init__( self ):
         """ Constructor
@@ -315,7 +318,7 @@ class Uploadr:
             (dirpath, dirnames, filenames) = data
             for f in filenames :
                 ext = f.lower().split(".")[-1]
-                if ( ext == "jpg" or ext == "gif" or ext == "png" or ext == "mp4" ):
+                if (ext in self.UPLOAD_EXT):
                     images.append( os.path.normpath( dirpath + "/" + f ) )
         images.sort()
         return images
