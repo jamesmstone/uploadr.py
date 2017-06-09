@@ -105,7 +105,7 @@ class Uploadr:
     perms = ""
     TOKEN_FILE = os.path.join(IMAGE_DIR, ".flickrToken")
     UPLOAD_EXT = [
-        "jpg", "gif", "png", "mp4"
+        "jpg", "gif", "png", "mp4", "avi"
     ]
 
     def __init__( self ):
